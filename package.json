@@ -1,5 +1,5 @@
 {
-  "name": "@viva-eng/service-template",
+  "name": "@viva-eng/user-service",
   "version": "",
   "description": "",
   "private": true,
@@ -13,13 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viva-eng/service-template.git"
+    "url": "git+https://github.com/viva-eng/user-service.git"
   },
   "keywords": [],
   "author": "James Brumond <james@jbrumond.me> (http://www.jbrumond.me)",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/viva/service-template/issues"
+    "url": "https://github.com/viva/user-service/issues"
   },
   "dependencies": {
     "@celeri/body-parser": "^2.1.0",
