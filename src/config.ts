@@ -72,7 +72,7 @@ export const config: Config = {
 	},
 
 	refTables: {
-		refreshInterval: cast.number(process.env.user_srv_ref_data_refresh_interval)
+		refreshInterval: cast.number(process.env.user_srv_ref_data_refresh_interval, 86400000)
 	},
 
 	services: {
