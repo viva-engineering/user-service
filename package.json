@@ -1,0 +1,49 @@
+{
+  "name": "@viva-eng/service-template",
+  "version": "",
+  "description": "",
+  "private": true,
+  "main": "build/index.js",
+  "scripts": {
+    "start": "node ./build/start.js",
+    "start:local": "cfg_env_files=../.env node ./build/start.js",
+    "clean": "rimraf ./build tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json",
+    "perf-test": "perf-test -r ts-node/register -s ./performance/suites/new-users.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viva-eng/service-template.git"
+  },
+  "keywords": [],
+  "author": "James Brumond <james@jbrumond.me> (http://www.jbrumond.me)",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/viva/service-template/issues"
+  },
+  "dependencies": {
+    "@celeri/body-parser": "^2.1.0",
+    "@celeri/caching": "^1.0.0",
+    "@celeri/http-error": "^2.0.1",
+    "@celeri/http-server": "^2.1.0",
+    "@celeri/query-parser": "^2.1.0",
+    "@celeri/request-logger": "^2.1.0",
+    "@viva-eng/config-loader": "^1.0.3",
+    "@viva-eng/database": "^3.0.3",
+    "@viva-eng/http-client": "^2.0.2",
+    "@viva-eng/logger": "^2.0.0",
+    "@viva-eng/payload-validator": "^1.0.5",
+    "colors": "^1.4.0",
+    "mysql2": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^11.11.4",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "@viva-eng/perf-test": "^1.0.2",
+    "eslint": "^6.1.0",
+    "rimraf": "^2.6.3",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.0"
+  }
+}
