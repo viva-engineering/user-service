@@ -4,14 +4,15 @@ import { config } from '../../../config';
 import { PreparedSelectQuery } from '@viva-eng/database';
 import { VisibilityScheme } from '../../../reference-data';
 import { SearchUsersRecord } from './search-user-record';
+import { escapeChar, escapeLikePattern } from '../../utils';
 
 export interface SearchUsersParams {
 	userId: string;
-	username: string;
+	displayName: string;
 }
 
-export const searchUsersByUsername = new PreparedSelectQuery<SearchUsersParams, SearchUsersRecord>({
-	description: 'select ... from user where username = ?',
+export const searchUsersByDisplayName = new PreparedSelectQuery<SearchUsersParams, SearchUsersRecord>({
+	description: 'select ... from user where display_name = ?',
 	prepared: `
 		select
 			user.id as user_id,
@@ -42,15 +43,18 @@ export const searchUsersByUsername = new PreparedSelectQuery<SearchUsersParams, 
 			on location_vis.id = user.location_visibility_id
 		left outer join visibility_scheme as birthday_vis
 			on birthday_vis.id = user.birthday_visibility_id
-		where user.username_discoverable = 1
-			and user.username = ?
+		where user.display_name_discoverable = 1
+			and user.display_name like ? escape '${escapeChar}'
+		limit 25
 	`,
 
 	prepareParams(params: SearchUsersParams) {
+		const displayNamePattern = escapeLikePattern(params.displayName);
+
 		return [
 			params.userId,
 			params.userId,
-			params.username
+			params.displayName
 		];
 	},
 

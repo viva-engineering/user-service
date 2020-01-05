@@ -7,11 +7,11 @@ import { SearchUsersRecord } from './search-user-record';
 
 export interface SearchUsersParams {
 	userId: string;
-	username: string;
+	userCode: string;
 }
 
-export const searchUsersByUsername = new PreparedSelectQuery<SearchUsersParams, SearchUsersRecord>({
-	description: 'select ... from user where username = ?',
+export const searchUsersByUserCode = new PreparedSelectQuery<SearchUsersParams, SearchUsersRecord>({
+	description: 'select ... from user where user_code = ?',
 	prepared: `
 		select
 			user.id as user_id,
@@ -42,15 +42,14 @@ export const searchUsersByUsername = new PreparedSelectQuery<SearchUsersParams, 
 			on location_vis.id = user.location_visibility_id
 		left outer join visibility_scheme as birthday_vis
 			on birthday_vis.id = user.birthday_visibility_id
-		where user.username_discoverable = 1
-			and user.username = ?
+		where user.user_code = ?
 	`,
 
 	prepareParams(params: SearchUsersParams) {
 		return [
 			params.userId,
 			params.userId,
-			params.username
+			params.userCode
 		];
 	},
 

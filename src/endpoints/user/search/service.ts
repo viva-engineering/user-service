@@ -3,6 +3,9 @@ import { db } from '../../../database';
 import { PoolConnection } from 'mysql2';
 import { TransactionType, SelectQueryResult } from '@viva-eng/database';
 import { searchUsersByUsername } from '../../../database/queries/user/search-by-username';
+import { searchUsersByUserCode } from '../../../database/queries/user/search-by-user-code';
+import { searchUsersByEmail } from '../../../database/queries/user/search-by-email';
+import { searchUsersByPhone } from '../../../database/queries/user/search-by-phone';
 import { SearchUsersRecord } from '../../../database/queries/user/search-user-record';
 import { HttpError } from '@celeri/http-error';
 import { logger } from '../../../logger';
@@ -15,6 +18,7 @@ enum ErrorCodes {
 }
 
 interface SearchUserResult {
+	self?: boolean;
 	username: string;
 	displayName: string;
 	email?: string;
@@ -34,12 +38,29 @@ export const searchUsers = async (user: AuthenticatedUser, searchField: SearchFi
 			case 'username':
 				records = await db.query(searchUsersByUsername, { userId: user.userId, username: value });
 				break;
+
+			// case 'displayName':
+			// 	// 
+			// 	break;
+
+			case 'email':
+				records = await db.query(searchUsersByEmail, { userId: user.userId, email: value });
+				break;
+
+			case 'phone':
+				records = await db.query(searchUsersByPhone, { userId: user.userId, phone: value });
+				break;
+
+			case 'userCode':
+				records = await db.query(searchUsersByUserCode, { userId: user.userId, userCode: value });
+				break;
 		}
 
 		return records.results.map((record) => {
+			const isSelf = record.user_id === user.userId;
 			const followingThem = followStatus(record.following_status);
 
-			const user: SearchUserResult = {
+			const result: SearchUserResult = {
 				username: record.username,
 				displayName: record.display_name || record.username,
 				userCode: record.user_code,
@@ -47,23 +68,27 @@ export const searchUsers = async (user: AuthenticatedUser, searchField: SearchFi
 				followingThem: followingThem
 			};
 
-			if (record.email && canView(record.email_visibility, followingThem === true)) {
-				user.email = record.email;
+			if (isSelf) {
+				result.self = true;
 			}
 
-			if (record.phone && canView(record.phone_visibility, followingThem === true)) {
-				user.phone = record.phone;
+			if (record.email && isSelf || canView(record.email_visibility, followingThem === true)) {
+				result.email = record.email;
 			}
 
-			if (record.location && canView(record.location_visibility, followingThem === true)) {
-				user.location = record.location;
+			if (record.phone && isSelf || canView(record.phone_visibility, followingThem === true)) {
+				result.phone = record.phone;
 			}
 
-			if (record.birthday && canView(record.birthday_visibility, followingThem === true)) {
-				user.birthday = record.birthday;
+			if (record.location && isSelf || canView(record.location_visibility, followingThem === true)) {
+				result.location = record.location;
 			}
 
-			return user;
+			if (record.birthday && isSelf || canView(record.birthday_visibility, followingThem === true)) {
+				result.birthday = record.birthday;
+			}
+
+			return result;
 		});
 	}
 

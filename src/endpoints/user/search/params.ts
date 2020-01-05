@@ -9,7 +9,7 @@ export interface Req {
 
 export enum SearchField {
 	Username = 'username',
-	DisplayName = 'displayName',
+	// DisplayName = 'displayName',
 	Email = 'email',
 	Phone = 'phone',
 	UserCode = 'userCode'
@@ -17,18 +17,18 @@ export enum SearchField {
 
 export interface Query {
 	username?: string;
-	displayName?: string;
+	// displayName?: string;
 	email?: string;
 	phone?: string;
 	userCode?: string;
 }
 
 const fields: Set<SearchField> = new Set([
-	SearchField.DisplayName,
+	SearchField.Username,
+	// SearchField.DisplayName,
 	SearchField.Email,
 	SearchField.Phone,
 	SearchField.UserCode,
-	SearchField.Username
 ]);
 
 const email = new EmailField({ });
@@ -42,7 +42,7 @@ export const validateQuery = ({ req, res }: MiddlewareInput<void, Req>) => {
 		throw new HttpError(400, 'Search query is required', {
 			expected: {
 				username: 'string',
-				displayName: 'string',
+				// displayName: 'string',
 				email: 'string',
 				phone: 'string',
 				userCode: 'string'

@@ -2,6 +2,7 @@
 import { VisibilityScheme } from '../../../reference-data';
 
 export interface SearchUsersRecord {
+	user_id: string;
 	username: string;
 	display_name: string;
 	email: string;
