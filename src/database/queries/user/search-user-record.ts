@@ -4,16 +4,18 @@ import { VisibilityScheme } from '../../../reference-data';
 export interface SearchUsersRecord {
 	user_id: string;
 	username: string;
+	user_code: string;
 	display_name: string;
 	email: string;
-	email_visibility: VisibilityScheme;
 	phone: string;
-	phone_visibility: VisibilityScheme;
 	location: string;
-	location_visibility: VisibilityScheme;
 	birthday: string;
+	bio: string;
+	email_visibility: VisibilityScheme;
+	phone_visibility: VisibilityScheme;
+	location_visibility: VisibilityScheme;
 	birthday_visibility: VisibilityScheme;
-	user_code: string;
+	bio_visibility: VisibilityScheme;
 
 	/** Is the searching user following the searched user */
 	following_status?: '0' | '1';

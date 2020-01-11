@@ -1,20 +1,17 @@
 
 import { server } from '../../../server';
 import { queryParser } from '@celeri/query-parser';
-import { validateQuery, Req, SearchField } from './params';
-import { searchUsers } from './service';
+import { validateParams, Req } from './params';
+import { lookupUserByUserCode } from './service';
 import { authenticate } from '../../../middlewares/authenticate';
 
 server
-	.get<void, Req>('/user/search')
+	.get<void, Req>('/user/:userCode{[a-zA-Z0-9]{40}}')
 	.use(authenticate({ required: true }))
 	.use(queryParser())
-	.use(validateQuery)
+	.use(validateParams)
 	.use(async ({ req, res }) => {
-		const searchField = Object.keys(req.query)[0] as SearchField;
-		const searchValue = req.query[searchField];
-
-		const users = await searchUsers(req.user, searchField, searchValue);
+		const users = await lookupUserByUserCode(req.user, req.params.userCode);
 		const payload = JSON.stringify({ users });
 
 		res.writeHead(200, { 'content-type': 'application/json' });

@@ -25,6 +25,7 @@ interface SearchUserResult {
 	phone?: string;
 	location?: string;
 	birthday?: string;
+	bio?: string;
 	userCode: string;
 	followingYou: boolean | 'pending';
 	followingThem: boolean | 'pending';
@@ -86,6 +87,10 @@ export const searchUsers = async (user: AuthenticatedUser, searchField: SearchFi
 
 			if (record.birthday && isSelf || canView(record.birthday_visibility, followingThem === true)) {
 				result.birthday = record.birthday;
+			}
+
+			if (record.bio && isSelf || canView(record.bio_visibility, followingThem === true)) {
+				result.bio = record.bio;
 			}
 
 			return result;

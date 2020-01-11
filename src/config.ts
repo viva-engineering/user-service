@@ -1,6 +1,7 @@
 
 import { PoolConfig } from 'mysql2';
 import { cast } from '@viva-eng/config-loader';
+import { RedisDB, RedisConfig } from '@viva-eng/redis-utils';
 
 interface ServiceConfig {
 	url: string;
@@ -22,6 +23,22 @@ export interface Config {
 	database: {
 		master: PoolConfig;
 		replica: PoolConfig;
+	};
+
+	redis: {
+		host: string;
+		port: number;
+		password: string;
+		dbs: {
+			followCache: RedisDB;
+		},
+		poolOptions: RedisConfig['pool'];
+	};
+
+	caches: {
+		follow: {
+			ttl: number;
+		};
 	};
 
 	refTables: {
@@ -68,6 +85,25 @@ export const config: Config = {
 			supportBigNumbers: true,
 			bigNumberStrings: true,
 			dateStrings: true
+		}
+	},
+
+	redis: {
+		host: cast.string(process.env.redis_host),
+		port: cast.number(process.env.redis_port),
+		password: cast.string(process.env.redis_pass),
+		dbs: {
+			followCache: cast.number(process.env.redis_db_follow_cache)
+		},
+		poolOptions: {
+			min: cast.number(process.env.user_srv_redis_pool_min),
+			max: cast.number(process.env.user_srv_redis_pool_max)
+		}
+	},
+
+	caches: {
+		follow: {
+			ttl: 60 * 60 * 24
 		}
 	},
 
