@@ -11,8 +11,8 @@ server
 	.use(queryParser())
 	.use(validateParams)
 	.use(async ({ req, res }) => {
-		const users = await lookupUserByUserCode(req.user, req.params.userCode);
-		const payload = JSON.stringify({ users });
+		const user = await lookupUserByUserCode(req.user, req.params.userCode);
+		const payload = JSON.stringify(user);
 
 		res.writeHead(200, { 'content-type': 'application/json' });
 		res.write(payload);

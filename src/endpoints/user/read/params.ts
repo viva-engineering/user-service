@@ -4,7 +4,7 @@ import { MiddlewareInput } from '@celeri/http-server';
 import { StringField } from '@viva-eng/payload-validator';
 
 export interface Req {
-	params?: Params
+	params?: Params;
 }
 
 export interface Params {

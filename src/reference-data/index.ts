@@ -16,5 +16,11 @@ export enum VisibilityScheme {
 	VisibleToFollowers = 'visible_to_followers'
 }
 
+export enum LanguageCode {
+	EnglishUS = 'en-us'
+}
+
 export const userRoles = new ReferenceTable<UserRole>('user_role');
 export const visibilitySchemes = new ReferenceTable<VisibilityScheme>('visibility_scheme');
+
+export const languageCodes: Set<LanguageCode> = new Set(Object.values(LanguageCode));

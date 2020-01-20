@@ -17,6 +17,7 @@ export class ReferenceTable<T extends string> {
 
 	private _byId: ReferenceTableById<T>;
 	private _byDescription: ReferenceTableByDescription<T>;
+	private _values: T[];
 
 	private readonly getQuery: LoadReferenceDataQuery<T>;
 
@@ -36,6 +37,10 @@ export class ReferenceTable<T extends string> {
 		return this._byDescription;
 	}
 
+	public enum() {
+		return new Set(this._values);
+	}
+
 	private refresh = async () => {
 		logger.debug('Refreshing reference data table', { table: this.tableName });
 
@@ -43,12 +48,14 @@ export class ReferenceTable<T extends string> {
 
 		this._byId = { };
 		this._byDescription = { };
+		this._values = [ ];
 
 		for (let i = 0; i < result.results.length; i++) {
 			const record = result.results[i];
 
 			this._byId[record.id] = record.description;
 			this._byDescription[record.description] = record.id;
+			this._values[i] = record.description;
 		}
 
 		logger.debug('Scheduling next reference data refresh', { table: this.tableName, delay: config.refTables.refreshInterval });
